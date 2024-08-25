@@ -1,0 +1,59 @@
+README for Memory Management Simulator
+Authored by Adam Sharabati
+ 
+ 
+
+Introduction
+This program simulates memory management in a computer, providing a model for how 
+operating systems handle processes, memory allocation, and paging. The simulation includes 
+functionalities for loading data into memory, storing data, and managing swapping between main memory and a swap file.
+
+Files
+mem_sim.h: Header file containing declarations of the main data structures and functions.
+mem_sim.c: Source file implementing the memory management simulation functions.
+runEX.c: Example main file demonstrating how to use the simulator
+run_me.sh: runs the main.c 
+
+Data Structures
+page_descriptor: Describes a page with fields for validity, dirtiness, permission, and frame or swap location.
+sim_database: Contains the page table, file descriptors, main memory, and sizes of different segments.
+
+Functions
+
+init_system: Initializes the simulation database with the executable and swap files, and sets up the page table.
+sim_database* init_system(char exe_file_name[], char swap_file_name[], int text_size, int data_size, int bss_heap_stack_size);
+
+clear_system: Cleans up resources by closing file descriptors and freeing allocated memory.
+void clear_system(struct sim_database * mem_sim);
+
+load: Loads a byte from a given address in the simulated memory.
+char load (struct sim_database * mem_sim, int address);
+
+store: Stores a byte at a given address in the simulated memory.
+void store(struct sim_database * mem_sim, int address, char value);
+
+print_memory: Prints the contents of the main memory.
+void print_memory(sim_database* mem_sim);
+
+print_swap: Prints the contents of the swap file.
+void print_swap(sim_database* mem_sim);
+
+print_page_table: Prints the page table.
+void print_page_table(sim_database* mem_sim);
+
+How It Works
+Initialization:
+
+init_system initializes the database with the executable and swap files, setting up the main memory and page table. Pages are marked with appropriate permissions, and memory is zeroed out.
+Memory Operations:
+
+load fetches data from a specific address, handling page faults by loading pages from the executable or swap file as needed.
+store writes data to a specific address, marking the page as dirty if it is modified.
+Paging and Swapping:
+
+The simulator maintains a page table to track the status of each page.
+When a page is not in main memory, it is loaded either from the executable or from the swap file. If the memory is full, the least recently used page is swapped out to the swap file.
+Utility Functions:
+
+print_memory and print_swap help in debugging by showing the contents of the main memory and swap file.
+print_page_table provides a snapshot of the page table, showing the state of each page.
